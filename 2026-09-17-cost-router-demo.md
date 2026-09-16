@@ -2,20 +2,20 @@
 
 Deployed agent: `e8c40381-a80e-492c-a33e-635044f95c16`
 Callable model: `SvirepyiBambr/cost-router`
-Date: 2026-09-17 (~02:2x MSK)
+Date: 2026-09-17 (~02:3x MSK)
 
-Three requests with different complexity, routed to different tiers.
-`chat/completions` answers (top-level `model` field shows the actual inner model;
-the full `X-Router-Reason` is visible on `/v1/responses` via `router_trace`).
+Three requests with different complexity, routed to three different models
+(nvidia/nemotron-3.5-lightning → x-ai/grok-4.3 → x-ai/grok-4.20).
+Verified via /v1/responses router_trace (reason includes tier, input score,
+price, health and fresh p50):
 
-## LIGHT
+## LIGHT (/v1/responses)
 
-prompt: Hi there, quick check 1789601420: what is 2+2?
+prompt: Hi there, quick check 1789601893: what is 2+2?
 
-body.model: accounts/fireworks/models/***
-content: Hi! 2 + 2 = 4.
+router_trace: {"model": "nvidia/nemotron-3.5-lightning", "reason": "LIGHT tier (input score 0.4) · picked nvidia/nemotron-3.5-lightning at $0.25/1M tok · health 99.4% · fresh p50 1800ms"}
 
-## STANDARD
+## STANDARD (/v1/responses)
 
 prompt: Review this TypeScript snippet and fix the bugs:
 ```ts
@@ -23,29 +23,25 @@ function debounce(fn: any, ms: number) {
   let t: any;
   return (...args: any[]) => { clearTimeout(t); t 
 
-body.model: accounts/fireworks/models/***
-content: ## Bug Analysis
+router_trace: {"model": "x-ai/grok-4.3", "reason": "STANDARD tier (input score 2.1) · picked x-ai/grok-4.3 at $2.81/1M tok · health 97.7% · fresh p50 9404ms"}
 
-The provided `debounce` function has a functional bug related to the JavaScript `this` context.
-
-### The Problem
-
-The retur
-
-## DEEP
+## DEEP (/v1/responses)
 
 prompt: Design a distributed rate limiter for a multi-region API gateway. Compare token bucket, sliding window log, and GCRA approaches in detail; prove the GCRA admiss
 
-body.model: accounts/fireworks/models/***
-content: # Distributed Rate Limiter Design for Multi-Region API Gateway  
-**Ticket:** 1789601420  
+router_trace: {"model": "x-ai/grok-4.20", "reason": "DEEP tier (input score 3.7) · picked x-ai/grok-4.20 at $6.00/1M tok · health 98.9% · fresh p50 981ms"}
 
----
-
-## 1. Overview & Design Goals
-A distributed 
-
-## /v1/responses trace check
+## LIGHT (chat/completions)
 
 body.model: accounts/fireworks/models/***
-router_trace: {"model": "nvidia/nemotron-3.5-lightning", "reason": "LIGHT tier (input score 0.1) · picked nvidia/nemotron-3.5-lightning at $0.25/1M tok · health 99.4% · fresh p50 1661ms"}
+router_trace: "(none)"
+
+## STANDARD (chat/completions)
+
+body.model: accounts/fireworks/models/***
+router_trace: "(none)"
+
+## DEEP (chat/completions)
+
+body.model: accounts/fireworks/models/***
+router_trace: "(none)"
