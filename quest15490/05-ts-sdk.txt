@@ -1,0 +1,5 @@
+TS SDK version: n/a
+plain: Hello! | usage: {"input_tokens":13,"output_tokens":5}
+streamed text: 1, 2, 3.
+stream stop: end_turn | usage: {"input_tokens":13,"output_tokens":11}
+tool: tool_use get_weather {"city":"Tokyo"} | stop: tool_use
