@@ -1,0 +1,2 @@
+=== /v1/messages tool use (round trip) ===
+{"id":"msg_chatcmpl-ESTYV5vI7FvHQPXXg6Rc5rqmxiwUT","type":"message","role":"assistant","model":"openai","content":[{"type":"tool_use","id":"call_6SlcoB1TA2yOtzk5Iayag4bR","name":"get_weather","input":{"city":"Paris"}}],"stop_reason":"tool_use","stop_sequence":null,"usage":{"input_tokens":133,"output_tokens":17}}
