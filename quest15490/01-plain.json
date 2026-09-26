@@ -1,0 +1,2 @@
+=== /v1/messages plain (model openai) ===
+{"id":"msg_chatcmpl-ESTYEBoX0OmTruEWsqs2U9gkQjv2R","type":"message","role":"assistant","model":"openai","content":[{"type":"text","text":"PONG"}],"stop_reason":"end_turn","stop_sequence":null,"usage":{"input_tokens":12,"output_tokens":5}}
